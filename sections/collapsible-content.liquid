@@ -106,6 +106,28 @@
   </div>
 </div>
 
+
+{% if section.settings.is_faq %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {% for block in section.blocks %}
+    {
+      "@type": "Question",
+      "name": "{{ block.settings.heading | escape }}",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "{{ block.settings.row_content | strip_newlines | escape }}"
+      }
+    }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  ]
+}
+</script>
+{% endif %}
+
 {% schema %}
 {
   "name": "t:sections.collapsible_content.name",
@@ -297,6 +319,12 @@
           "default": "t:sections.collapsible_content.blocks.collapsible_row.settings.heading.default",
           "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.heading.label"
         },
+        {
+  "type": "checkbox",
+  "id": "is_faq",
+  "label": "Activer les microdonnées FAQ",
+  "default": false
+},
         {
           "type": "select",
           "id": "icon",
